@@ -37,7 +37,3 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-
-# Everything within the data/raw and data/processed folder
-data/raw/*
-data/processed/*
