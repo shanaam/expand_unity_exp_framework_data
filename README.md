@@ -7,7 +7,7 @@ Script for expanding per-trial data from the SMCL unity experiment framework
 1. Open the **expand_unity_exp_framework_data** R project via RStudio
 1. In R studio, open the **make_long_csvs.R** script
 1. Ensure you have the following 3 packages installed: tidyverse, data.table, future
-1. In the R script, change the **"measures_to_expand"** list to include the columns you want to expand
+1. In the R script, change the **"measures_to_expand"** list to include the columns you want to expand (you don't need to include the suffixes ("_x", "_y", etc.))
 1. Click "Source" (near the top of RStudio)
 1. New data will be in the data/processed folder
 
