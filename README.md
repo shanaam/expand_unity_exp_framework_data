@@ -3,7 +3,7 @@ Script for expanding per-trial data from the SMCL unity experiment framework
 
 ## Steps
 1. Make a copy of this repo (download or clone)
-1. Populate the data/raw folder with your data
+1. Populate the data/raw folder with your data (there should be 1 folder per participant in the raw/ folder)
 1. Open the R project via RStudio
 1. In R studio, open the make_long_csvs.R script
 1. Ensure you have the following 3 packages installed: tidyverse, data.table, future
