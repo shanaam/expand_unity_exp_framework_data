@@ -14,5 +14,6 @@ Script for expanding per-trial data from the SMCL unity experiment framework
 ## Notes
 - Each of the measures to expand should be separated by an _ (underscore)
 - For each measure, there should be _x, _y, _z and _time_stamp columns
-- Each folder in the data/raw folder should have with it: a single folder names S001, and within that, a single file names trial_results.csv
+- Each folder in the data/raw folder should have with it a single folder named S001, and within that, a single file named trial_results.csv.
+
 The above is the default data logging behaviour for our unity framework.
