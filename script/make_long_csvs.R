@@ -34,8 +34,6 @@ convert_cell_to_numvec <- function(v) {
   v <- strsplit(v, "_")
   # convert to numeric:
   v <- lapply(v, FUN = as.numeric)
-  # make vector:
-  v <- as.vector(unlist(v))
 
   return(v)
 }
@@ -95,52 +93,26 @@ lengthen_participant <- function(ppt_path, measures_to_expand) {
 
 # lengthen a single measure
 lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save_dir) {
-  # get columns that begin with the measure string
-  measure_cols <- trial_results %>%
-    select(starts_with(measure)) %>%
-    as_tibble()
+
+  # remove measure from the measures_to_expand list
+  measures_to_expand <- measures_to_expand[measures_to_expand != measure]
 
   # from trial_results, remove columns that begin with any string in the list measures_to_expand
   trial_results <- trial_results %>%
     select(-starts_with(measures_to_expand))
 
   # if number of columns is not 4, throw error
-  if (ncol(measure_cols) != 4) {
+  if (sum(startsWith(colnames(trial_results), measure)) != 4) {
     stop("Error: Double check the measure to be lengthened (also ensure there isn't another column that starts with the same string)")
   }
-
-  # make empty list
-  per_frame_x_list <- list()
-  per_frame_y_list <- list()
-  per_frame_z_list <- list()
-  per_frame_timepoint_list <- list()
-
-  per_frame_x_list <- populate_list(measure_cols, per_frame_x_list, measure, "_x")
-  per_frame_y_list <- populate_list(measure_cols, per_frame_y_list, measure, "_y")
-  per_frame_z_list <- populate_list(measure_cols, per_frame_z_list, measure, "_z")
-  per_frame_timepoint_list <- populate_list(measure_cols, per_frame_timepoint_list, measure, "_time_stamp") 
-
-  # Add the lists to the trial_results as new columns
-  trial_results <- trial_results %>%
-    add_column( x = per_frame_x_list, 
-      y = per_frame_y_list, 
-      z = per_frame_z_list, 
-      time_stamp = per_frame_timepoint_list)
-
-  # unnest the lists
-  unnested_df <- trial_results %>%
-    unnest(cols = c(x, y, z, time_stamp))
   
-
-  # rename the columns
-  unnested_df <- unnested_df %>%
-    rename(!!paste(measure,"_x", sep="") := x, 
-      !!paste(measure,"_y", sep="") := y, 
-      !!paste(measure,"_z", sep="") := z, 
-      !!paste(measure,"_time_stamp", sep="") := time_stamp)
+  # convert the string lists to numeric vectors
+  trial_results <- trial_results %>%
+    mutate(across(starts_with(measure), convert_cell_to_numvec)) %>%
+    unnest(cols = starts_with(measure))
 
   # save the measure
-  fwrite(unnested_df, to_save_dir)
+  fwrite(trial_results, to_save_dir)
 
   # return anything
   return(1)
