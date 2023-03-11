@@ -38,9 +38,7 @@ convert_cell_to_numvec <- function(v) {
   return(v)
 }
 
-
 ##### Main functions #####
-
 # lengthen all data in data/raw directory
 lengthen_all_data <- function(measures_to_expand) {
   # get all participant paths
@@ -93,7 +91,6 @@ lengthen_participant <- function(ppt_path, measures_to_expand) {
 
 # lengthen a single measure
 lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save_dir) {
-
   # remove measure from the measures_to_expand list
   measures_to_expand <- measures_to_expand[measures_to_expand != measure]
 
@@ -118,19 +115,6 @@ lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save
   return(1)
 }
 
-# populate a single list
-populate_list <- function(measure_cols, list, measure, suffix) {
-  # convert each row to a list
-  for (i in 1:nrow(measure_cols)) {
-    list[[i]] <- convert_cell_to_numvec(
-      as.character(measure_cols[i, paste(measure, suffix, sep = "")])
-    )
-  }
-
-  return(list)
-}
-
 ##### Run #####
 plan(multisession)
 lengthen_all_data(measures_to_expand)
-
