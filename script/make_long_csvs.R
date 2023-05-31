@@ -108,6 +108,12 @@ lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save
   trial_results <- trial_results %>%
     mutate(across(starts_with(measure), convert_cell_to_numvec)) %>%
     unnest(cols = starts_with(measure))
+  
+  # if there are 3 columns, add a column for time
+  if (sum(startsWith(colnames(trial_results), measure)) == 3) {
+    trial_results <- trial_results %>%
+      mutate(time = 1:nrow(.))
+  }
 
   # save the measure
   fwrite(trial_results, to_save_file_name)
