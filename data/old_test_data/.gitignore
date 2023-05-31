@@ -1,0 +1,3 @@
+# all directories in this folder
+*
+!.gitignore

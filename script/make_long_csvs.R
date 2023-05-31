@@ -18,7 +18,8 @@ library(tidyverse)
 library(future)
 
 ##### Set this variable #####
-measures_to_expand <- c("hand_pos", "Indicator_position")
+measures_to_expand <- c("ball_path")
+time_steps_exist <- FALSE
 
 ##### Helper functions #####
 # create a directory if it doesn't exist
@@ -90,7 +91,7 @@ lengthen_participant <- function(ppt_path, measures_to_expand) {
 }
 
 # lengthen a single measure
-lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save_dir) {
+lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save_file_name) {
   # remove measure from the measures_to_expand list
   measures_to_expand <- measures_to_expand[measures_to_expand != measure]
 
@@ -98,8 +99,8 @@ lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save
   trial_results <- trial_results %>%
     select(-starts_with(measures_to_expand))
 
-  # if number of columns is not 4, throw error
-  if (sum(startsWith(colnames(trial_results), measure)) != 4) {
+  # if number of columns is not 4 or 3, throw error
+  if (sum(startsWith(colnames(trial_results), measure)) != 4 & sum(startsWith(colnames(trial_results), measure)) != 3) {
     stop("Error: Double check the measure to be lengthened (also ensure there isn't another column that starts with the same string)")
   }
   
@@ -109,7 +110,7 @@ lengthen_measure <- function(trial_results, measure, measures_to_expand, to_save
     unnest(cols = starts_with(measure))
 
   # save the measure
-  fwrite(trial_results, to_save_dir)
+  fwrite(trial_results, to_save_file_name)
 
   # return anything
   return(1)
